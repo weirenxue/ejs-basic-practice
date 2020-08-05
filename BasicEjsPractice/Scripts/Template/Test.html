@@ -1,0 +1,21 @@
+﻿<% for (keyT in 學生資料) { %>
+    <h2 id="<%= keyT %>"><%= keyT %></h2>
+        <%= orderedListObject(學生資料, keyT)%>
+<% } %>
+
+<% function orderedListObject(o, keyT) { %>
+    <ul>
+        <% for (key in o[keyT]) { %>
+            <% if (typeof(o[keyT][key]) !== 'object') { %>
+                <li>
+                    <%= key %>:<%= o[keyT][key]%>
+                </li>
+            <% } else { %>
+                <li>
+                    <%= key %>
+                    <%= orderedListObject(o[keyT], key) %>
+                </li>
+            <% } %>
+        <% } %>
+    </ul>
+<% } %>
