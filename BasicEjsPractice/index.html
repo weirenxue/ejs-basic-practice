@@ -24,16 +24,65 @@
                 }
             });
             $("#sendHTMLtoAPI").on('click', function () {
+                /*var xhr = new XMLHttpRequest();
+                xhr.open('POST', './API/generatePDF.ashx?', true);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.responseType = 'blob';
+
+                var blob = "";
+
+                xhr.onload = function (e) {
+                    if (this.status == 200) {
+                        blob = new Blob([xhr.response], { type: 'application/pdf' });
+                        var filename = "";
+                        var disposition = xhr.getResponseHeader('Content-Disposition');
+                        if (disposition && disposition.indexOf('attachment') !== -1) {
+                            var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                            var matches = filenameRegex.exec(disposition);
+                            if (matches != null && matches[1]) {
+                                filename = matches[1].replace(/['"]/g, '');
+                            }
+                        }
+                        const a = document.createElement("a")
+                        const url = window.URL.createObjectURL(blob)
+                        a.href = url;
+                        a.download = filename ? filename : "test.pdf";
+                        document.body.appendChild(a);
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                        a.remove();
+                    }
+                };
+
+                xhr.send('content=' + $('div#divContent').html());*/
+
                 $.ajax({
-                    type: 'post',
+                    type: 'POST',
                     url: './API/generatePDF.ashx?' + `${new Date().getTime()}`,
                     data: 'content=' + $('div#divContent').html(),
-                    async: false,
-                    success: function (data) {
-
+                    xhrFields: {
+                        responseType: 'blob'
+                    },
+                    success: function (response, status, xhr) {
+                        var filename = "";
+                        var disposition = xhr.getResponseHeader('Content-Disposition');
+                        if (disposition && disposition.indexOf('attachment') !== -1) {
+                            var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                            var matches = filenameRegex.exec(disposition);
+                            if (matches != null && matches[1]) {
+                                filename = matches[1].replace(/['"]/g, '');
+                            }
+                        }
+                        const a = document.createElement("a")
+                        const url = window.URL.createObjectURL(response)
+                        a.href = url;
+                        a.download = filename ? filename : "test.pdf";
+                        document.body.appendChild(a);
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                        a.remove();
                     }
                 });
-                console.log($("#divContent").html());
             });
         });
     </script>
