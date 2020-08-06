@@ -20,13 +20,26 @@
                 async: false,
                 success: function (data) {
                     var html = ejs.render(data, { 學生資料: jsonData });
-                    $('div.divContent').html(html);
+                    $('div#divContent').html(html);
                 }
+            });
+            $("#sendHTMLtoAPI").on('click', function () {
+                $.ajax({
+                    type: 'post',
+                    url: './API/generatePDF.ashx?' + `${new Date().getTime()}`,
+                    data: 'content=' + $('div#divContent').html(),
+                    async: false,
+                    success: function (data) {
+
+                    }
+                });
+                console.log($("#divContent").html());
             });
         });
     </script>
 </head>
 <body>
-    <div class="divContent"></div>
+    <button id="sendHTMLtoAPI">下載為pdf</button>
+    <div id="divContent"></div>
 </body>
 </html>
